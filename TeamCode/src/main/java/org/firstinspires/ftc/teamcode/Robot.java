@@ -1,7 +1,6 @@
 /*
  * Handles all robot hardware (motors, servos).
  *
- *
  * Name of stuff:
  *      1. Right drive
  *      2. Left drive
@@ -27,11 +26,14 @@
  * Necessary Functionality (not for here):
  *      1. Drivetrain (always same speed???)
  *      2. Open/close gripper (binary, hopefully)
+ *
+ * Testing:
+ *      - Make sure driveRobot can handle args outside of (-1, 1) range
  */
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -43,7 +45,9 @@ public class Robot {
     public static final double ARM_UP_POWER = 0.45;
     public static final double ARM_DOWN_POWER = -0.45;
 
-    private LinearOpMode opMode = null;
+    public static final double MAX_DRIVE_POWER = 1;
+
+    private OpMode opMode = null;
 
     private DcMotor rightDriveMotor = null;
     private DcMotor leftDriveMotor = null;
@@ -56,7 +60,7 @@ public class Robot {
     private Servo leftHand = null;
     private Servo rightHand = null;
 
-    public Robot(LinearOpMode opmode) {
+    public Robot(OpMode opmode) {
         opMode = opmode;
     }
 
@@ -85,43 +89,32 @@ public class Robot {
         opMode.telemetry.update();
     }
 
-    // TODO: replace with encoder stuff
-
-    /**
-     * Calculates the left/right motor powers required to achieve the requested
-     * robot motions: Drive (Axial motion) and Turn (Yaw motion).
-     * Then sends these power levels to the motors.
-     *
-     * @param Drive Fwd/Rev driving power (-1.0 to 1.0) +ve is forward
-     * @param Turn  Right/Left turning power (-1.0 to 1.0) +ve is CW
-     */
-    public void driveRobot(double Drive, double Turn) {
+    public void driveRobot(double drive, double turn) {
         // Combine drive and turn for blended motion.
-        double left = Drive + Turn;
-        double right = Drive - Turn;
+        double left = drive + turn;
+        double right = drive - turn;
 
         // Scale the values so neither exceed +/- 1.0
         double max = Math.max(Math.abs(left), Math.abs(right));
         if (max > 1.0) {
             left /= max;
             right /= max;
+            max = Math.max(Math.abs(left), Math.abs(right));
         }
 
-        // Use existing function to drive both wheels.
+        // Scale for max speed (drive power)
+        left = Range.scale(left, -1.0, 1.0, -MAX_DRIVE_POWER, MAX_DRIVE_POWER);
+        left = Range.scale(right, -1.0, 1.0, -MAX_DRIVE_POWER, MAX_DRIVE_POWER);
+
         setDrivePower(left, right);
     }
 
-    /**
-     * Pass the requested wheel motor powers to the appropriate hardware drive motors.
-     *
-     * @param leftWheel  Fwd/Rev driving power (-1.0 to 1.0) +ve is forward
-     * @param rightWheel Fwd/Rev driving power (-1.0 to 1.0) +ve is forward
-     */
     public void setDrivePower(double leftWheel, double rightWheel) {
-        // Output the values to the motor drives.
         leftDriveMotor.setPower(leftWheel);
         rightDriveMotor.setPower(rightWheel);
     }
+
+    // All wrong below, we're using diff config
 
     /**
      * Pass the requested arm power to the appropriate hardware drive motor
@@ -133,7 +126,6 @@ public class Robot {
         leftArmMotor.setPower(power);
     }
 
-    // All wrong, we're using diff config
     // TODO: write set wrist/gripper position
 
     /**
