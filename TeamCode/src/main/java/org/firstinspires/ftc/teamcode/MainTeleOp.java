@@ -13,11 +13,17 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp(name = "Main TeleOp (for comp 2)")
 public class MainTeleOp extends OpMode {
 
+    private final boolean GAMEPAD_COLLECTION = true;
+    private final boolean GAMEPAD_SECURE = true;
+    private final boolean GAMEPAD_DEPOSITION = true;
+
     Robot robot = null;
 
     @Override
     public void init() {
         robot = new Robot(this);
+
+        robot.prepareMotorsTeleOp();
 
         telemetry.addData(">", "Initialized");
         telemetry.addData(">", "Waiting for start..");
@@ -32,16 +38,21 @@ public class MainTeleOp extends OpMode {
 
     @Override
     public void loop() {
-        // driving (mostly handled by Robot)
+        // Driving (mostly handled by Robot)
         double drive = -gamepad1.left_stick_y;
         double turn = gamepad1.right_stick_x;
 
         robot.driveRobot(drive, turn);
 
-        /*
-        TODO:
-        Deal with set positions
-        "Attach listeners to call Robot button press handlers"
-         */
+        // Hard-coded positions
+        if (GAMEPAD_COLLECTION) {
+            robot.moveToCollectionPosition();
+        } else if (GAMEPAD_SECURE) {
+            robot.moveToSecurePosition();
+        } else if (GAMEPAD_DEPOSITION) {
+            robot.moveToDepositionPosition();
+        }
+
+        // TODO: fluid movement of other parts
     }
 }
