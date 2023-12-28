@@ -10,6 +10,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.robots.Robot;
+
 @TeleOp(name = "Main TeleOp (for comp 2)")
 public class MainTeleOp extends OpMode {
 

@@ -35,11 +35,12 @@
  *
  * Testing:
  *      - Make sure driveRobot can handle args outside of (-1, 1) range
+ *      - Make sure motors and servos can handle args outside of motion range (ideally, they just wouldn't move)
  *
  * TODO: Implement linear slide motor
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.robots;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -47,9 +48,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 public class Robot {
-    // Counts Per Revolution = CPR
-    public static final int CPR_DRIVE_MOTOR = 100; // TODO: Update with actual value
-    public static final int CPR_ARM_MOTOR = 100; // Same
+    // Positions (fractional & encoder counts)
+    public static final int PIVOT_COLLECTION_POS_COUNT = 0;
+    public static final int PIVOT_SECURE_POS_COUNT = 100;
+    public static final int PIVOT_DEPOSITION_POS_COUNT = 200;
 
     public static final int ARM_COLLECTION_POS_COUNT = 0;
     public static final int ARM_SECURE_POS_COUNT = 100;
@@ -59,25 +61,42 @@ public class Robot {
     public static final double WRIST_SECURE_POS = 0.3;
     public static final double WRIST_DEPOSITION_POS = 0.5;
 
-    // Might have to reverse
     public static final double GRIPPER_CLOSED_POS = 0.0;
     public static final double GRIPPER_OPEN_POS = 1.0;
+
+    // TeleOp Movements
+    public static final double PIVOT_SHORT_MOVEMENT = 0.05;
+    public static final double ARM_SHORT_MOVEMENT = 0.05;
+    public static final double WRIST_SHORT_MOVEMENT = 0.05;
     public static final double GRIPPER_SHORT_MOVEMENT = 0.05;
 
+    // Power
     public static final double MAX_DRIVE_POWER = 1;
-    public static final double ARM_SPEED = 1;
+    public static final double PIVOT_POWER = 1;
+    public static final double ARM_POWER = 1;
 
-    //
+    // Counts Per Revolution = CPR
+    public static final int CPR_DRIVE_MOTOR = 100;
+    public static final int CPR_PIVOT_MOTOR = 100;
+    public static final int CPR_ARM_MOTOR = 100;
+
+    // Motors
+    private DcMotor rightDriveMotor = null;
+    private DcMotor leftDriveMotor = null;
+    private DcMotor pivotMotor = null; // To change angle of linear slide
+    private DcMotor armMotor = null; // To extend/retract linear slide
+
+    // Servos
     private Servo wristServo = null;
     private Servo gripperServo = null;
 
-    //
-    private DcMotor rightDriveMotor = null;
-    private DcMotor leftDriveMotor = null;
-    private DcMotor armMotor = null;
-
-    //
+    // For hardwareMap & telemetry
     private OpMode opMode = null;
+
+    //--------------------------------------------------------------------------
+    // Constructors & Initialization
+    //--------------------------------------------------------------------------
+
 
     public Robot(OpMode opmode) {
         opMode = opmode;
@@ -87,6 +106,7 @@ public class Robot {
         // TODO: Update mapped names
         leftDriveMotor = opMode.hardwareMap.get(DcMotor.class, "left_drive");
         rightDriveMotor = opMode.hardwareMap.get(DcMotor.class, "right_drive");
+        pivotMotor = opMode.hardwareMap.get(DcMotor.class, "pivot");
         armMotor = opMode.hardwareMap.get(DcMotor.class, "arm");
 
         leftDriveMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -99,11 +119,31 @@ public class Robot {
         opMode.telemetry.update();
     }
 
+    //--------------------------------------------------------------------------
+    // Motor Encoder Config
+    //--------------------------------------------------------------------------
+
+    /**
+     * Changes encoder settings on motors for TeleOp
+     */
+    public void prepareMotorsTeleOp() {
+        leftDriveMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDriveMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    //--------------------------------------------------------------------------
+    // Robot Positions
+    //--------------------------------------------------------------------------
+
     /**
      * In position to grab pixel
      */
     public void moveToCollectionPosition() {
-        moveMotor(armMotor, ARM_COLLECTION_POS_COUNT, ARM_SPEED);
+        moveMotor(armMotor, ARM_COLLECTION_POS_COUNT, ARM_POWER);
+        moveMotor(pivotMotor, PIVOT_COLLECTION_POS_COUNT, PIVOT_POWER);
         moveWristGripper(WRIST_COLLECTION_POS, GRIPPER_OPEN_POS);
     }
 
@@ -111,7 +151,8 @@ public class Robot {
      * Secure position when moving (ideally to backboard)
      */
     public void moveToSecurePosition() {
-        moveMotor(armMotor, ARM_SECURE_POS_COUNT, ARM_SPEED);
+        moveMotor(armMotor, ARM_SECURE_POS_COUNT, ARM_POWER);
+        moveMotor(pivotMotor, PIVOT_SECURE_POS_COUNT, PIVOT_POWER);
         moveWristGripper(WRIST_SECURE_POS, GRIPPER_CLOSED_POS);
     }
 
@@ -119,9 +160,14 @@ public class Robot {
      * In position to place pixel on backboard
      */
     public void moveToDepositionPosition() {
-        moveMotor(armMotor, ARM_DEPOSITION_POS_COUNT, ARM_SPEED);
+        moveMotor(armMotor, ARM_DEPOSITION_POS_COUNT, ARM_POWER);
+        moveMotor(pivotMotor, PIVOT_DEPOSITION_POS_COUNT, PIVOT_POWER);
         moveWristGripper(WRIST_DEPOSITION_POS, GRIPPER_CLOSED_POS);
     }
+
+    //--------------------------------------------------------------------------
+    // Helper
+    //--------------------------------------------------------------------------
 
     /**
      * Moves motor to desired position at desired speed
@@ -155,30 +201,12 @@ public class Robot {
         gripperServo.setPosition(GRIPPER_CLOSED_POS);
     }
 
-    public void openGripperShort() {
-        // May have to change sign
-        gripperServo.setPosition(gripperServo.getPosition() + GRIPPER_SHORT_MOVEMENT);
-    }
-
-    public void closeGripperShort() {
-        // May have to change sign
-        gripperServo.setPosition(gripperServo.getPosition() - GRIPPER_SHORT_MOVEMENT);
-    }
+    //--------------------------------------------------------------------------
+    // TeleOp Only
+    //--------------------------------------------------------------------------
 
     /**
-     * Changes encoder settings on motors for TeleOp
-     */
-    public void prepareMotorsTeleOp() {
-        leftDriveMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightDriveMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
-    /**
-     * ONLY for TeleOp
-     * Doesn't use encoders
+     * Fluid driving w/ encoders
      *
      * @param drive: Raw forward/backward
      * @param turn:  Raw left/right
@@ -201,5 +229,15 @@ public class Robot {
 
         leftDriveMotor.setPower(left);
         rightDriveMotor.setPower(right);
+    }
+
+    public void openGripperShort() {
+        // May have to change sign
+        gripperServo.setPosition(gripperServo.getPosition() + GRIPPER_SHORT_MOVEMENT);
+    }
+
+    public void closeGripperShort() {
+        // May have to change sign
+        gripperServo.setPosition(gripperServo.getPosition() - GRIPPER_SHORT_MOVEMENT);
     }
 }
