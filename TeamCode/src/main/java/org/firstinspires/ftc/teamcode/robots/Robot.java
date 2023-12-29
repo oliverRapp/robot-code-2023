@@ -45,58 +45,49 @@ package org.firstinspires.ftc.teamcode.robots;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 
 public class Robot {
-    // Positions (fractional & encoder counts)
-    public static final int PIVOT_COLLECTION_POS_COUNT = 0;
-    public static final int PIVOT_SECURE_POS_COUNT = 100;
-    public static final int PIVOT_DEPOSITION_POS_COUNT = 200;
-
-    public static final int ARM_COLLECTION_POS_COUNT = 0;
-    public static final int ARM_SECURE_POS_COUNT = 100;
-    public static final int ARM_DEPOSITION_POS_COUNT = 200;
-
-    public static final double WRIST_COLLECTION_POS = 0.1;
-    public static final double WRIST_SECURE_POS = 0.3;
-    public static final double WRIST_DEPOSITION_POS = 0.5;
-
-    public static final double GRIPPER_CLOSED_POS = 0.0;
-    public static final double GRIPPER_OPEN_POS = 1.0;
-
     // TeleOp Movements
-    public static final double PIVOT_SHORT_MOVEMENT = 0.05;
-    public static final double ARM_SHORT_MOVEMENT = 0.05;
-    public static final double WRIST_SHORT_MOVEMENT = 0.05;
-    public static final double GRIPPER_SHORT_MOVEMENT = 0.05;
-
+    protected final int PIVOT_SHORT_MOVEMENT = 5;
+    protected final int ARM_SHORT_MOVEMENT = 5;
+    protected final double WRIST_SHORT_MOVEMENT = 0.05;
+    protected final double GRIPPER_SHORT_MOVEMENT = 0.05;
     // Power
-    public static final double MAX_DRIVE_POWER = 1;
-    public static final double PIVOT_POWER = 1;
-    public static final double ARM_POWER = 1;
-
+    protected final double MAX_DRIVE_POWER = 1;
+    protected final double PIVOT_POWER = 1;
+    protected final double ARM_POWER = 1;
     // Counts Per Revolution = CPR
-    public static final int CPR_DRIVE_MOTOR = 100;
-    public static final int CPR_PIVOT_MOTOR = 100;
-    public static final int CPR_ARM_MOTOR = 100;
-
+    protected final int CPR_DRIVE_MOTOR = 100;
+    protected final int CPR_PIVOT_MOTOR = 100;
+    protected final int CPR_ARM_MOTOR = 100;
+    // Positions (fractional & encoder counts)
+    protected final int PIVOT_COLLECTION_POS_COUNT = 0;
+    protected final int PIVOT_SECURE_POS_COUNT = 100;
+    protected final int PIVOT_DEPOSITION_POS_COUNT = 200;
+    protected final int ARM_COLLECTION_POS_COUNT = 0;
+    protected final int ARM_SECURE_POS_COUNT = 100;
+    protected final int ARM_DEPOSITION_POS_COUNT = 200;
+    protected final double WRIST_COLLECTION_POS = 0.1;
+    protected final double WRIST_SECURE_POS = 0.3;
+    protected final double WRIST_DEPOSITION_POS = 0.5;
+    protected final double GRIPPER_CLOSED_POS = 0.0;
+    protected final double GRIPPER_OPEN_POS = 1.0;
     // Motors
-    private DcMotor rightDriveMotor = null;
-    private DcMotor leftDriveMotor = null;
-    private DcMotor pivotMotor = null; // To change angle of linear slide
-    private DcMotor armMotor = null; // To extend/retract linear slide
+    protected DcMotor rightDriveMotor = null;
+    protected DcMotor leftDriveMotor = null;
+    protected DcMotor pivotMotor = null; // To change angle of linear slide
+    protected DcMotor armMotor = null; // To extend/retract linear slide
 
     // Servos
-    private Servo wristServo = null;
-    private Servo gripperServo = null;
+    protected Servo wristServo = null;
+    protected Servo gripperServo = null;
 
     // For hardwareMap & telemetry
-    private OpMode opMode = null;
+    protected OpMode opMode = null;
 
     //--------------------------------------------------------------------------
     // Constructors & Initialization
     //--------------------------------------------------------------------------
-
 
     public Robot(OpMode opmode) {
         opMode = opmode;
@@ -120,21 +111,6 @@ public class Robot {
     }
 
     //--------------------------------------------------------------------------
-    // Motor Encoder Config
-    //--------------------------------------------------------------------------
-
-    /**
-     * Changes encoder settings on motors for TeleOp
-     */
-    public void prepareMotorsTeleOp() {
-        leftDriveMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightDriveMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
-    //--------------------------------------------------------------------------
     // Robot Positions
     //--------------------------------------------------------------------------
 
@@ -142,32 +118,41 @@ public class Robot {
      * In position to grab pixel
      */
     public void moveToCollectionPosition() {
-        moveMotor(armMotor, ARM_COLLECTION_POS_COUNT, ARM_POWER);
-        moveMotor(pivotMotor, PIVOT_COLLECTION_POS_COUNT, PIVOT_POWER);
-        moveWristGripper(WRIST_COLLECTION_POS, GRIPPER_OPEN_POS);
+        moveRobot(PIVOT_COLLECTION_POS_COUNT, ARM_COLLECTION_POS_COUNT, WRIST_COLLECTION_POS, GRIPPER_OPEN_POS);
     }
 
     /**
      * Secure position when moving (ideally to backboard)
      */
     public void moveToSecurePosition() {
-        moveMotor(armMotor, ARM_SECURE_POS_COUNT, ARM_POWER);
-        moveMotor(pivotMotor, PIVOT_SECURE_POS_COUNT, PIVOT_POWER);
-        moveWristGripper(WRIST_SECURE_POS, GRIPPER_CLOSED_POS);
+        moveRobot(PIVOT_SECURE_POS_COUNT, ARM_SECURE_POS_COUNT, WRIST_SECURE_POS, GRIPPER_CLOSED_POS);
     }
 
     /**
      * In position to place pixel on backboard
      */
     public void moveToDepositionPosition() {
-        moveMotor(armMotor, ARM_DEPOSITION_POS_COUNT, ARM_POWER);
-        moveMotor(pivotMotor, PIVOT_DEPOSITION_POS_COUNT, PIVOT_POWER);
-        moveWristGripper(WRIST_DEPOSITION_POS, GRIPPER_CLOSED_POS);
+        moveRobot(PIVOT_DEPOSITION_POS_COUNT, ARM_DEPOSITION_POS_COUNT, WRIST_DEPOSITION_POS, GRIPPER_CLOSED_POS);
     }
 
     //--------------------------------------------------------------------------
     // Helper
     //--------------------------------------------------------------------------
+
+    /**
+     * Template for changing robot position
+     *
+     * @param pivotPosCount
+     * @param armPosCount
+     * @param wristPos
+     * @param gripperPos
+     */
+    protected void moveRobot(int pivotPosCount, int armPosCount, double wristPos, double gripperPos) {
+        moveMotor(pivotMotor, pivotPosCount, PIVOT_POWER);
+        moveMotor(armMotor, armPosCount, ARM_POWER);
+        wristServo.setPosition(wristPos);
+        gripperServo.setPosition(gripperPos);
+    }
 
     /**
      * Moves motor to desired position at desired speed
@@ -176,68 +161,9 @@ public class Robot {
      * @param position
      * @param power
      */
-    private void moveMotor(DcMotor motor, int position, double power) {
+    protected void moveMotor(DcMotor motor, int position, double power) {
         motor.setTargetPosition(position);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setPower(power);
-    }
-
-    /**
-     * Moves hand and wrist servos to desired position
-     *
-     * @param wristPos
-     * @param gripperPos
-     */
-    private void moveWristGripper(double wristPos, double gripperPos) {
-        wristServo.setPosition(wristPos);
-        gripperServo.setPosition(gripperPos);
-    }
-
-    private void openGripper() {
-        gripperServo.setPosition(GRIPPER_OPEN_POS);
-    }
-
-    private void closeGripper() {
-        gripperServo.setPosition(GRIPPER_CLOSED_POS);
-    }
-
-    //--------------------------------------------------------------------------
-    // TeleOp Only
-    //--------------------------------------------------------------------------
-
-    /**
-     * Fluid driving w/ encoders
-     *
-     * @param drive: Raw forward/backward
-     * @param turn:  Raw left/right
-     */
-    public void driveRobot(double drive, double turn) {
-        // Combine drive and turn for blended motion.
-        double left = drive + turn;
-        double right = drive - turn;
-
-        // Scale the values so neither exceed +/- 1.0
-        double max = Math.max(Math.abs(left), Math.abs(right));
-        if (max > 1.0) {
-            left /= max;
-            right /= max;
-        }
-
-        // Scale for max speed (drive power)
-        left = Range.scale(left, -1.0, 1.0, -MAX_DRIVE_POWER, MAX_DRIVE_POWER);
-        right = Range.scale(right, -1.0, 1.0, -MAX_DRIVE_POWER, MAX_DRIVE_POWER);
-
-        leftDriveMotor.setPower(left);
-        rightDriveMotor.setPower(right);
-    }
-
-    public void openGripperShort() {
-        // May have to change sign
-        gripperServo.setPosition(gripperServo.getPosition() + GRIPPER_SHORT_MOVEMENT);
-    }
-
-    public void closeGripperShort() {
-        // May have to change sign
-        gripperServo.setPosition(gripperServo.getPosition() - GRIPPER_SHORT_MOVEMENT);
     }
 }
