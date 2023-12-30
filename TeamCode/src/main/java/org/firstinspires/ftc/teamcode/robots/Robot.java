@@ -91,6 +91,7 @@ public class Robot {
 
     public Robot(OpMode opmode) {
         opMode = opmode;
+        init();
     }
 
     public void init() {
