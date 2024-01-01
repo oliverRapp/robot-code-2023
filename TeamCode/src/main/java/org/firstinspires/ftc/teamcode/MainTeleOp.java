@@ -14,18 +14,21 @@ import org.firstinspires.ftc.teamcode.robots.TeleOpRobot;
 
 @TeleOp(name = "Main TeleOp (for comp 2)")
 public class MainTeleOp extends OpMode {
-    private final boolean GAMEPAD_COLLECTION = true;
-    private final boolean GAMEPAD_SECURE = true;
-    private final boolean GAMEPAD_DEPOSITION = true;
+    private double GAMEPAD_DRIVE = gamepad1.left_stick_y;
+    private double GAMEPAD_TURN = gamepad1.right_stick_x;
 
-    private final boolean GAMEPAD_RAISE_PIVOT = true;
-    private final boolean GAMEPAD_LOWER_PIVOT = true;
-    private final boolean GAMEPAD_EXTEND_ARM = true;
-    private final boolean GAMEPAD_RETRACT_ARM = true;
-    private final boolean GAMEPAD_RAISE_WRIST = true;
-    private final boolean GAMEPAD_LOWER_WRIST = true;
-    private final boolean GAMEPAD_OPEN_GRIPPER = true;
-    private final boolean GAMEPAD_CLOSE_GRIPPER = true;
+    private boolean GAMEPAD_COLLECTION = gamepad1.a;
+    private boolean GAMEPAD_SECURE = gamepad1.x;
+    private boolean GAMEPAD_DEPOSITION = gamepad1.y;
+
+    private boolean GAMEPAD_RAISE_PIVOT = gamepad1.right_bumper;
+    private boolean GAMEPAD_LOWER_PIVOT = gamepad1.left_bumper;
+    private float GAMEPAD_EXTEND_ARM = gamepad1.right_trigger;
+    private float GAMEPAD_RETRACT_ARM = gamepad1.left_trigger;
+    private boolean GAMEPAD_RAISE_WRIST = gamepad1.dpad_up;
+    private boolean GAMEPAD_LOWER_WRIST = gamepad1.dpad_down;
+    private boolean GAMEPAD_OPEN_GRIPPER = gamepad1.dpad_right;
+    private boolean GAMEPAD_CLOSE_GRIPPER = gamepad1.dpad_left;
 
     TeleOpRobot robot = null;
 
@@ -47,10 +50,7 @@ public class MainTeleOp extends OpMode {
     @Override
     public void loop() {
         // Driving (mostly handled by Robot)
-        double drive = -gamepad1.left_stick_y;
-        double turn = gamepad1.right_stick_x;
-
-        robot.driveRobot(drive, turn);
+        robot.driveRobot(-GAMEPAD_DRIVE, GAMEPAD_TURN);
 
         // Hard-coded positions
         if (GAMEPAD_COLLECTION) {
@@ -68,10 +68,10 @@ public class MainTeleOp extends OpMode {
         if (GAMEPAD_LOWER_PIVOT) {
             robot.lowerPivotShort();
         }
-        if (GAMEPAD_EXTEND_ARM) {
+        if (GAMEPAD_EXTEND_ARM > 0) {
             robot.extendArmShort();
         }
-        if (GAMEPAD_RETRACT_ARM) {
+        if (GAMEPAD_RETRACT_ARM > 0) {
             robot.retractArmShort();
         }
         if (GAMEPAD_RAISE_WRIST) {
