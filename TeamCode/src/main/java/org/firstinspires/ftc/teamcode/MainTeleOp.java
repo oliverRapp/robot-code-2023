@@ -14,21 +14,21 @@ import org.firstinspires.ftc.teamcode.robots.TeleOpRobot;
 
 @TeleOp(name = "Main TeleOp (for comp 2)")
 public class MainTeleOp extends OpMode {
-    private double GAMEPAD_DRIVE = gamepad1.left_stick_y;
-    private double GAMEPAD_TURN = gamepad1.right_stick_x;
+    private final double GAMEPAD_DRIVE = gamepad1.left_stick_y;
+    private final double GAMEPAD_TURN = gamepad1.right_stick_x;
 
-    private boolean GAMEPAD_COLLECTION = gamepad1.a;
-    private boolean GAMEPAD_SECURE = gamepad1.x;
-    private boolean GAMEPAD_DEPOSITION = gamepad1.y;
+    private final boolean GAMEPAD_COLLECTION = gamepad1.a;
+    private final boolean GAMEPAD_SECURE = gamepad1.x;
+    private final boolean GAMEPAD_DEPOSITION = gamepad1.y;
 
-    private boolean GAMEPAD_RAISE_PIVOT = gamepad1.right_bumper;
-    private boolean GAMEPAD_LOWER_PIVOT = gamepad1.left_bumper;
-    private float GAMEPAD_EXTEND_ARM = gamepad1.right_trigger;
-    private float GAMEPAD_RETRACT_ARM = gamepad1.left_trigger;
-    private boolean GAMEPAD_RAISE_WRIST = gamepad1.dpad_up;
-    private boolean GAMEPAD_LOWER_WRIST = gamepad1.dpad_down;
-    private boolean GAMEPAD_OPEN_GRIPPER = gamepad1.dpad_right;
-    private boolean GAMEPAD_CLOSE_GRIPPER = gamepad1.dpad_left;
+    private final boolean GAMEPAD_RAISE_PIVOT = gamepad1.right_bumper;
+    private final boolean GAMEPAD_LOWER_PIVOT = gamepad1.left_bumper;
+    private final float GAMEPAD_EXTEND_ARM = gamepad1.right_trigger;
+    private final float GAMEPAD_RETRACT_ARM = gamepad1.left_trigger;
+    private final boolean GAMEPAD_RAISE_WRIST = gamepad1.dpad_up;
+    private final boolean GAMEPAD_LOWER_WRIST = gamepad1.dpad_down;
+    private final boolean GAMEPAD_OPEN_GRIPPER = gamepad1.dpad_right;
+    private final boolean GAMEPAD_CLOSE_GRIPPER = gamepad1.dpad_left;
 
     TeleOpRobot robot = null;
 
