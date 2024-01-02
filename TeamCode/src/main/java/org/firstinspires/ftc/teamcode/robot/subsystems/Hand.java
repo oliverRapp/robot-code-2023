@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.robot.Robot;
+
 public class Hand {
     private final double WRIST_MIN_POS = 0;
     private final double WRIST_MAX_POS = 1;
@@ -32,6 +34,23 @@ public class Hand {
 
         currWristPos = 0;
         currGripperPos = 0;
+    }
+
+    public void moveToPosition(Robot.Positions pos) {
+        switch(pos) {
+            case COLLECT:
+                wristServo.setPosition(WRIST_COLLECTION_POS);
+                gripperServo.setPosition(GRIPPER_OPEN_POS);
+                break;
+            case SECURE:
+                wristServo.setPosition(WRIST_SECURE_POS);
+                gripperServo.setPosition(GRIPPER_CLOSED_POS);
+                break;
+            case DEPOSIT:
+                wristServo.setPosition(WRIST_DEPOSITION_POS);
+                gripperServo.setPosition(GRIPPER_CLOSED_POS);
+                break;
+        }
     }
 
     public void raiseWristShort() {

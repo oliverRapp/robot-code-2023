@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.util.MotorHelper;
 
 public class Arm {
@@ -55,6 +56,23 @@ public class Arm {
         if (useMotorPosition) {
             currPivotPos = pivotMotor.getCurrentPosition();
             currSlidePos = slideMotor.getCurrentPosition();
+        }
+    }
+
+    public void moveToPosition(Robot.Positions pos) {
+        switch(pos) {
+            case COLLECT:
+                MotorHelper.moveMotor(pivotMotor, PIVOT_COLLECTION_POS, PIVOT_POWER);
+                MotorHelper.moveMotor(slideMotor, SLIDE_COLLECTION_POS, SLIDE_COLLECTION_POS);
+                break;
+            case SECURE:
+                MotorHelper.moveMotor(pivotMotor, PIVOT_SECURE_POS, PIVOT_POWER);
+                MotorHelper.moveMotor(slideMotor, SLIDE_SECURE_POS, SLIDE_COLLECTION_POS);
+                break;
+            case DEPOSIT:
+                MotorHelper.moveMotor(pivotMotor, PIVOT_DEPOSITION_POS, PIVOT_POWER);
+                MotorHelper.moveMotor(slideMotor, SLIDE_DEPOSITION_POS, SLIDE_COLLECTION_POS);
+                break;
         }
     }
 

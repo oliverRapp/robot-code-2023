@@ -11,10 +11,26 @@ public class Robot {
     public Arm arm;
     public Hand hand;
 
+    public enum Positions {
+        COLLECT,
+        SECURE,
+        DEPOSIT
+    }
+
     public Robot(HardwareMap hwMap) {
         drivetrain = new Drivetrain(hwMap);
         arm = new Arm(hwMap);
         hand = new Hand(hwMap);
     }
 
+    public void moveToPosition(Positions pos) {
+
+    }
+
+
+
+    public void updatePositions() {
+        arm.updatePositions();
+        hand.updatePositions();
+    }
 }
