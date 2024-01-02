@@ -59,28 +59,28 @@ public class FTCTeleOp extends OpMode {
 
         // Small adjustments
         if (GAMEPAD_RAISE_PIVOT) {
-            robot.arm.raisePivotShort();
+            robot.pivot.raiseShort();
         }
         if (GAMEPAD_LOWER_PIVOT) {
-            robot.arm.lowerPivotShort();
+            robot.pivot.lowerShort();
         }
         if (GAMEPAD_EXTEND_SLIDE > 0) {
-            robot.arm.extendSlideShort();
+            robot.slide.extendShort();
         }
         if (GAMEPAD_RETRACT_SLIDE > 0) {
-            robot.arm.retractSlideShort();
+            robot.slide.retractShort();
         }
         if (GAMEPAD_RAISE_WRIST) {
-            robot.hand.raiseWristShort();
+            robot.wrist.raiseShort();
         }
         if (GAMEPAD_LOWER_WRIST) {
-            robot.hand.lowerWristShort();
+            robot.wrist.lowerShort();
         }
         if (GAMEPAD_OPEN_GRIPPER) {
-            robot.hand.openGripperShort();
+            robot.gripper.openShort();
         }
         if (GAMEPAD_CLOSE_GRIPPER) {
-            robot.hand.closeGripperShort();
+            robot.gripper.closeShort();
         }
 
         robot.updatePositions();

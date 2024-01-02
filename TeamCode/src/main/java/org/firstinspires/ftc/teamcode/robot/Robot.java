@@ -2,34 +2,44 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.robot.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.robot.subsystems.Hand;
+import org.firstinspires.ftc.teamcode.robot.subsystems.Gripper;
+import org.firstinspires.ftc.teamcode.robot.subsystems.LinearSlide;
+import org.firstinspires.ftc.teamcode.robot.subsystems.SlidePivot;
+import org.firstinspires.ftc.teamcode.robot.subsystems.Wrist;
 
 public class Robot {
-    public Drivetrain drivetrain;
-    public Arm arm;
-    public Hand hand;
-
     public enum Positions {
         COLLECT,
         SECURE,
         DEPOSIT
     }
 
+    public Drivetrain drivetrain;
+    public SlidePivot pivot;
+    public LinearSlide slide;
+    public Wrist wrist;
+    public Gripper gripper;
+
     public Robot(HardwareMap hwMap) {
         drivetrain = new Drivetrain(hwMap);
-        arm = new Arm(hwMap);
-        hand = new Hand(hwMap);
+        pivot = new SlidePivot(hwMap);
+        slide = new LinearSlide(hwMap);
+        wrist = new Wrist(hwMap);
+        gripper = new Gripper(hwMap);
     }
 
     public void moveToPosition(Positions pos) {
-        arm.moveToPosition(pos);
-        hand.moveToPosition(pos);
+        pivot.moveToPosition(pos);
+        slide.moveToPosition(pos);
+        wrist.moveToPosition(pos);
+        gripper.moveToPosition(pos);
     }
 
     public void updatePositions() {
-        arm.updatePositions();
-        hand.updatePositions();
+        pivot.updatePositions();
+        slide.updatePositions();
+        wrist.updatePositions();
+        gripper.updatePositions();
     }
 }
