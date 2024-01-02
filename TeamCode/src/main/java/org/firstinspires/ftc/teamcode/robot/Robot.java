@@ -28,8 +28,6 @@ public class Robot {
         hand.moveToPosition(pos);
     }
 
-
-
     public void updatePositions() {
         arm.updatePositions();
         hand.updatePositions();
