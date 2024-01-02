@@ -24,7 +24,8 @@ public class Robot {
     }
 
     public void moveToPosition(Positions pos) {
-
+        arm.moveToPosition(pos);
+        hand.moveToPosition(pos);
     }
 
 
