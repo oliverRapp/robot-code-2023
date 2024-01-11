@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.robot.util.MotorHelper;
 
-public class LinearSlide {
+public class Slide {
     private final int CPR_SLIDE = 1;
 
     private final double SLIDE_POWER = 1;
@@ -25,7 +25,7 @@ public class LinearSlide {
 
     private int currSlidePos;
 
-    public LinearSlide(HardwareMap hwMap) {
+    public Slide(HardwareMap hwMap) {
         slideMotor = hwMap.get(DcMotor.class, "slide");
 
         currSlidePos = 0;

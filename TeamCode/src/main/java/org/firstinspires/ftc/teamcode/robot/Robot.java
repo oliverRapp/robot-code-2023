@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Gripper;
-import org.firstinspires.ftc.teamcode.robot.subsystems.LinearSlide;
+import org.firstinspires.ftc.teamcode.robot.subsystems.Slide;
 import org.firstinspires.ftc.teamcode.robot.subsystems.SlidePivot;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Wrist;
 
@@ -17,14 +17,14 @@ public class Robot {
 
     public Drivetrain drivetrain;
     public SlidePivot pivot;
-    public LinearSlide slide;
+    public Slide slide;
     public Wrist wrist;
     public Gripper gripper;
 
     public Robot(HardwareMap hwMap) {
         drivetrain = new Drivetrain(hwMap);
         pivot = new SlidePivot(hwMap);
-        slide = new LinearSlide(hwMap);
+        slide = new Slide(hwMap);
         wrist = new Wrist(hwMap);
         gripper = new Gripper(hwMap);
     }
