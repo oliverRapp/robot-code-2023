@@ -16,7 +16,7 @@ public class Wrist {
     private final double WRIST_SECURE_POS = 0.3;
     private final double WRIST_DEPOSITION_POS = 0.5;
 
-    private final Servo wristServo;
+    private Servo wristServo;
 
     private double currWristPos;
 

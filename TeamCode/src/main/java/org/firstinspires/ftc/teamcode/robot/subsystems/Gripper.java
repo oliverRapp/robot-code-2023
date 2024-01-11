@@ -15,7 +15,7 @@ public class Gripper {
     private final double GRIPPER_CLOSED_POS = 0.0;
     private final double GRIPPER_OPEN_POS = 1.0;
 
-    private final Servo gripperServo;
+    private Servo gripperServo;
 
     private double currGripperPos;
 
