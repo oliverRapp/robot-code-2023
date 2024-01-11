@@ -8,26 +8,26 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 @TeleOp(name = "Main TeleOp (Gamepad Test)")
 public class FTCTeleOp extends OpMode {
     private double GAMEPAD_DRIVE;
-    private final double GAMEPAD_TURN = gamepad1.right_stick_x;
+    private double GAMEPAD_TURN;
 
-    private final boolean GAMEPAD_RAISE_PIVOT = gamepad1.right_bumper;
-    private final boolean GAMEPAD_LOWER_PIVOT = gamepad1.left_bumper;
+    private boolean GAMEPAD_RAISE_PIVOT;
+    private boolean GAMEPAD_LOWER_PIVOT;
 
-    private final float GAMEPAD_EXTEND_SLIDE = gamepad1.right_trigger;
-    private final float GAMEPAD_RETRACT_SLIDE = gamepad1.left_trigger;
+    private float GAMEPAD_EXTEND_SLIDE;
+    private float GAMEPAD_RETRACT_SLIDE;
 
-    private final boolean GAMEPAD_RAISE_WRIST = gamepad1.dpad_up;
-    private final boolean GAMEPAD_LOWER_WRIST = gamepad1.dpad_down;
+    private boolean GAMEPAD_RAISE_WRIST;
+    private boolean GAMEPAD_LOWER_WRIST;
 
-    private final boolean GAMEPAD_OPEN_GRIPPER = gamepad1.dpad_right;
-    private final boolean GAMEPAD_CLOSE_GRIPPER = gamepad1.dpad_left;
+    private boolean GAMEPAD_OPEN_GRIPPER;
+    private boolean GAMEPAD_CLOSE_GRIPPER;
 
     // Add drone button
-    private final boolean GAMEPAD_RELEASE_DRONE = true;
+    private boolean GAMEPAD_RELEASE_DRONE;
 
-    private final boolean GAMEPAD_COLLECTION = gamepad1.a;
-    private final boolean GAMEPAD_SECURE = gamepad1.x;
-    private final boolean GAMEPAD_DEPOSITION = gamepad1.y;
+    private boolean GAMEPAD_COLLECTION;
+    private boolean GAMEPAD_SECURE;
+    private boolean GAMEPAD_DEPOSITION;
 
     Robot robot = null;
 
@@ -36,6 +36,26 @@ public class FTCTeleOp extends OpMode {
         robot = new Robot(this.hardwareMap);
 
         GAMEPAD_DRIVE = gamepad1.left_stick_y;
+        GAMEPAD_TURN = gamepad1.right_stick_x;
+
+        GAMEPAD_RAISE_PIVOT = gamepad1.right_bumper;
+        GAMEPAD_LOWER_PIVOT = gamepad1.left_bumper;
+
+        GAMEPAD_EXTEND_SLIDE = gamepad1.right_trigger;
+        GAMEPAD_RETRACT_SLIDE = gamepad1.left_trigger;
+
+        GAMEPAD_RAISE_WRIST = gamepad1.dpad_up;
+        GAMEPAD_LOWER_WRIST = gamepad1.dpad_down;
+
+        GAMEPAD_OPEN_GRIPPER = gamepad1.dpad_right;
+        GAMEPAD_CLOSE_GRIPPER = gamepad1.dpad_left;
+
+        // Add drone button
+        GAMEPAD_RELEASE_DRONE = true;
+
+        GAMEPAD_COLLECTION = gamepad1.a;
+        GAMEPAD_SECURE = gamepad1.x;
+        GAMEPAD_DEPOSITION = gamepad1.y;
 
         telemetry.addData(">", "Initialized");
         telemetry.addData(">", "Waiting for start..");
