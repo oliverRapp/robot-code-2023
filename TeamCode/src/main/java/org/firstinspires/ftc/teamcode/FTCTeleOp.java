@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @TeleOp(name = "Main TeleOp (for comp 2)")
 public class FTCTeleOp extends OpMode {
-    private final double GAMEPAD_DRIVE = gamepad1.left_stick_y;
+    private double GAMEPAD_DRIVE;
     private final double GAMEPAD_TURN = gamepad1.right_stick_x;
 
     private final boolean GAMEPAD_RAISE_PIVOT = gamepad1.right_bumper;
@@ -22,6 +22,9 @@ public class FTCTeleOp extends OpMode {
     private final boolean GAMEPAD_OPEN_GRIPPER = gamepad1.dpad_right;
     private final boolean GAMEPAD_CLOSE_GRIPPER = gamepad1.dpad_left;
 
+    // Add drone button
+    private final boolean GAMEPAD_RELEASE_DRONE = true;
+
     private final boolean GAMEPAD_COLLECTION = gamepad1.a;
     private final boolean GAMEPAD_SECURE = gamepad1.x;
     private final boolean GAMEPAD_DEPOSITION = gamepad1.y;
@@ -31,6 +34,8 @@ public class FTCTeleOp extends OpMode {
     @Override
     public void init() {
         robot = new Robot(this.hardwareMap);
+
+        GAMEPAD_DRIVE = gamepad1.left_stick_y;
 
         telemetry.addData(">", "Initialized");
         telemetry.addData(">", "Waiting for start..");
@@ -81,6 +86,9 @@ public class FTCTeleOp extends OpMode {
         }
         if (GAMEPAD_CLOSE_GRIPPER) {
             robot.gripper.closeShort();
+        }
+        if (GAMEPAD_RELEASE_DRONE) {
+            robot.drone.release();
         }
 
         robot.updatePositions();
