@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
-@TeleOp(name = "Main TeleOp (for comp 2)")
+@TeleOp(name = "Main TeleOp (Gamepad Test)")
 public class FTCTeleOp extends OpMode {
     private double GAMEPAD_DRIVE;
     private final double GAMEPAD_TURN = gamepad1.right_stick_x;
