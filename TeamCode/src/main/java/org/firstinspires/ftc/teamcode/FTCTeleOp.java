@@ -83,12 +83,12 @@ public class FTCTeleOp extends OpMode {
         }
 
         // Small adjustments
-        if (GAMEPAD_RAISE_PIVOT) {
-            robot.pivot.raiseShort();
-        }
-        if (GAMEPAD_LOWER_PIVOT) {
-            robot.pivot.lowerShort();
-        }
+//        if (GAMEPAD_RAISE_PIVOT) {
+//            robot.pivot.raiseShort();
+//        }
+//        if (GAMEPAD_LOWER_PIVOT) {
+//            robot.pivot.lowerShort();
+//        }
         if (GAMEPAD_EXTEND_SLIDE > 0) {
             robot.slide.extendShort();
         }
@@ -107,9 +107,9 @@ public class FTCTeleOp extends OpMode {
 //        if (GAMEPAD_CLOSE_GRIPPER) {
 //            robot.gripper.closeShort();
 //        }
-        if (GAMEPAD_RELEASE_DRONE) {
-            robot.drone.release();
-        }
+//        if (GAMEPAD_RELEASE_DRONE) {
+//            robot.drone.release();
+//        }
 
         robot.updatePositions();
     }
