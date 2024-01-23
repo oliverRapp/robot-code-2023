@@ -26,16 +26,20 @@ public class Wrist {
         currWristPos = 0;
     }
 
+    public double getPos() {
+        return wristServo.getPosition();
+    }
+
     public void moveToPosition(Robot.Positions pos) {
         switch (pos) {
             case COLLECT:
-                wristServo.setPosition(WRIST_COLLECTION_POS);
+                currWristPos = WRIST_COLLECTION_POS;
                 break;
             case SECURE:
-                wristServo.setPosition(WRIST_SECURE_POS);
+                currWristPos = WRIST_SECURE_POS;
                 break;
             case DEPOSIT:
-                wristServo.setPosition(WRIST_DEPOSITION_POS);
+                currWristPos = WRIST_DEPOSITION_POS;
                 break;
         }
     }

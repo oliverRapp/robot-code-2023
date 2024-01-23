@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robot.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
@@ -10,16 +11,16 @@ import org.firstinspires.ftc.teamcode.robot.util.MotorHelper;
 public class SlidePivot {
     private final int CPR_PIVOT = 1;
 
-    private final double PIVOT_POWER = 1;
+    private final double PIVOT_POWER = 0.8;
 
     private final int PIVOT_MIN_POS = 0;
-    private final int PIVOT_MAX_POS = 200;
+    private final int PIVOT_MAX_POS = 490;
 
     private final int PIVOT_SHORT_MOVEMENT = 5;
 
-    private final int PIVOT_COLLECTION_POS = 0;
-    private final int PIVOT_SECURE_POS = 50;
-    private final int PIVOT_DEPOSITION_POS = 100;
+    private final int PIVOT_COLLECTION_POS = 15;
+    private final int PIVOT_SECURE_POS = 100;
+    private final int PIVOT_DEPOSITION_POS = 300;
 
     private DcMotor pivotMotor;
 
@@ -28,7 +29,13 @@ public class SlidePivot {
     public SlidePivot(HardwareMap hwMap) {
         pivotMotor = hwMap.get(DcMotor.class, "pivot");
 
+        pivotMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
         currPivotPos = 0;
+    }
+
+    public int getPos() {
+        return pivotMotor.getCurrentPosition();
     }
 
     /**
@@ -47,23 +54,23 @@ public class SlidePivot {
     public void moveToPosition(Robot.Positions pos) {
         switch(pos) {
             case COLLECT:
-                MotorHelper.moveMotor(pivotMotor, PIVOT_COLLECTION_POS, PIVOT_POWER);
+                currPivotPos = PIVOT_COLLECTION_POS;
                 break;
             case SECURE:
-                MotorHelper.moveMotor(pivotMotor, PIVOT_SECURE_POS, PIVOT_POWER);
+                currPivotPos = PIVOT_SECURE_POS;
                 break;
             case DEPOSIT:
-                MotorHelper.moveMotor(pivotMotor, PIVOT_DEPOSITION_POS, PIVOT_POWER);
+                currPivotPos = PIVOT_DEPOSITION_POS;
                 break;
         }
     }
 
     public void raiseShort() {
-        currPivotPos += Range.clip(currPivotPos + PIVOT_SHORT_MOVEMENT, PIVOT_MIN_POS, PIVOT_MAX_POS);
+        currPivotPos = Range.clip(currPivotPos + PIVOT_SHORT_MOVEMENT, PIVOT_MIN_POS, PIVOT_MAX_POS);
     }
 
     public void lowerShort() {
-        currPivotPos += Range.clip(currPivotPos - PIVOT_SHORT_MOVEMENT, PIVOT_MIN_POS, PIVOT_MAX_POS);
+        currPivotPos = Range.clip(currPivotPos - PIVOT_SHORT_MOVEMENT, PIVOT_MIN_POS, PIVOT_MAX_POS);
     }
 
     /**

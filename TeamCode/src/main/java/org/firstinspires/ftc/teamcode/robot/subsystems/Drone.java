@@ -13,6 +13,10 @@ public class Drone {
         droneServo = hwMap.get(Servo.class, "drone");
     }
 
+    public double getPos() {
+        return droneServo.getPosition();
+    }
+
     public void close() {
         droneServo.setPosition(DRONE_CLOSE_POS);
     }

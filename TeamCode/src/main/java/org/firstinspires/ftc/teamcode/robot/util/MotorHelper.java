@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.robot.util;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public final class MotorHelper {
-   private MotorHelper() {}
+    private MotorHelper() {}
 
     public static void prepareMotorEncoder(DcMotor motor, boolean useMotorPosition) {
         if (useMotorPosition) {

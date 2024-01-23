@@ -13,13 +13,13 @@ public class Slide {
     private final double SLIDE_POWER = 1;
 
     private final int SLIDE_MIN_POS = 0;
-    private final int SLIDE_MAX_POS = 200;
+    private final int SLIDE_MAX_POS = 1475; // 1479 = actual max
 
     private final int SLIDE_SHORT_MOVEMENT = 5;
 
     private final int SLIDE_COLLECTION_POS = 0;
-    private final int SLIDE_SECURE_POS = 50;
-    private final int SLIDE_DEPOSITION_POS = 100;
+    private final int SLIDE_SECURE_POS = 500;
+    private final int SLIDE_DEPOSITION_POS = SLIDE_MAX_POS;
 
     private DcMotor slideMotor;
 
@@ -29,6 +29,10 @@ public class Slide {
         slideMotor = hwMap.get(DcMotor.class, "slide");
 
         currSlidePos = 0;
+    }
+
+    public int getPos() {
+        return slideMotor.getCurrentPosition();
     }
 
     /**
@@ -47,23 +51,23 @@ public class Slide {
     public void moveToPosition(Robot.Positions pos) {
         switch(pos) {
             case COLLECT:
-                MotorHelper.moveMotor(slideMotor, SLIDE_COLLECTION_POS, SLIDE_COLLECTION_POS);
+                currSlidePos = SLIDE_COLLECTION_POS;
                 break;
             case SECURE:
-                MotorHelper.moveMotor(slideMotor, SLIDE_SECURE_POS, SLIDE_COLLECTION_POS);
+                currSlidePos = SLIDE_SECURE_POS;
                 break;
             case DEPOSIT:
-                MotorHelper.moveMotor(slideMotor, SLIDE_DEPOSITION_POS, SLIDE_COLLECTION_POS);
+                currSlidePos = SLIDE_DEPOSITION_POS;
                 break;
         }
     }
 
     public void extendShort() {
-        currSlidePos += Range.clip(currSlidePos + SLIDE_SHORT_MOVEMENT, SLIDE_MIN_POS, SLIDE_MAX_POS);
+        currSlidePos = Range.clip(currSlidePos + SLIDE_SHORT_MOVEMENT, SLIDE_MIN_POS, SLIDE_MAX_POS);
     }
 
     public void retractShort() {
-        currSlidePos += Range.clip(currSlidePos - SLIDE_SHORT_MOVEMENT, SLIDE_MIN_POS, SLIDE_MAX_POS);
+        currSlidePos = Range.clip(currSlidePos - SLIDE_SHORT_MOVEMENT, SLIDE_MIN_POS, SLIDE_MAX_POS);
     }
 
     /**

@@ -35,6 +35,21 @@ public class FTCTeleOp extends OpMode {
     public void init() {
         robot = new Robot(this.hardwareMap);
 
+        robot.prepareMotorsTeleOp();
+
+        telemetry.addData(">", "Initialized");
+        telemetry.addData(">", "Waiting for start..");
+        telemetry.update();
+    }
+
+    @Override
+    public void start() {
+        telemetry.addData(">", "Started");
+        telemetry.update();
+    }
+
+    @Override
+    public void loop() {
         GAMEPAD_DRIVE = gamepad1.left_stick_y;
         GAMEPAD_TURN = gamepad1.right_stick_x;
 
@@ -51,27 +66,26 @@ public class FTCTeleOp extends OpMode {
         GAMEPAD_CLOSE_GRIPPER = gamepad1.dpad_left;
 
         // Add drone button
-        GAMEPAD_RELEASE_DRONE = true;
+        GAMEPAD_RELEASE_DRONE = gamepad1.b;
 
         GAMEPAD_COLLECTION = gamepad1.a;
         GAMEPAD_SECURE = gamepad1.x;
         GAMEPAD_DEPOSITION = gamepad1.y;
 
-        telemetry.addData(">", "Initialized");
-        telemetry.addData(">", "Waiting for start..");
-        telemetry.update();
-    }
 
-    @Override
-    public void start() {
-        telemetry.addData(">", "Started");
-        telemetry.update();
-    }
-
-    @Override
-    public void loop() {
         // Driving
-        robot.drivetrain.driveFluid(-GAMEPAD_DRIVE, GAMEPAD_TURN);
+        double driveSq = GAMEPAD_DRIVE * GAMEPAD_DRIVE;
+        double turnSq = GAMEPAD_TURN * GAMEPAD_TURN;
+        robot.drivetrain.driveFluid(-driveSq * Math.signum(GAMEPAD_DRIVE), -turnSq * Math.signum(GAMEPAD_TURN));
+
+        // Testing logging
+        telemetry.addData(">", "slide: " + robot.slide.getPos());
+        telemetry.addData(">", "pivot: " + robot.pivot.getPos());
+        telemetry.addData(">", "drone: " + robot.drone.getPos());
+        telemetry.addData(">", "gripper: " + robot.gripper.getPos());
+        telemetry.addData(">", "wrist: " + robot.wrist.getPos());
+
+        telemetry.update();
 
         // Hard-coded positions
         if (GAMEPAD_COLLECTION) {
@@ -83,33 +97,35 @@ public class FTCTeleOp extends OpMode {
         }
 
         // Small adjustments
-//        if (GAMEPAD_RAISE_PIVOT) {
-//            robot.pivot.raiseShort();
-//        }
-//        if (GAMEPAD_LOWER_PIVOT) {
-//            robot.pivot.lowerShort();
-//        }
+        if (GAMEPAD_RAISE_PIVOT) {
+            robot.pivot.raiseShort();
+        }
+        if (GAMEPAD_LOWER_PIVOT) {
+            robot.pivot.lowerShort();
+        }
         if (GAMEPAD_EXTEND_SLIDE > 0) {
             robot.slide.extendShort();
         }
         if (GAMEPAD_RETRACT_SLIDE > 0) {
             robot.slide.retractShort();
         }
-//        if (GAMEPAD_RAISE_WRIST) {
-//            robot.wrist.raiseShort();
-//        }
-//        if (GAMEPAD_LOWER_WRIST) {
-//            robot.wrist.lowerShort();
-//        }
-//        if (GAMEPAD_OPEN_GRIPPER) {
-//            robot.gripper.openShort();
-//        }
-//        if (GAMEPAD_CLOSE_GRIPPER) {
-//            robot.gripper.closeShort();
-//        }
-//        if (GAMEPAD_RELEASE_DRONE) {
-//            robot.drone.release();
-//        }
+        if (GAMEPAD_RAISE_WRIST) {
+            robot.wrist.raiseShort();
+        }
+        if (GAMEPAD_LOWER_WRIST) {
+            robot.wrist.lowerShort();
+        }
+        if (GAMEPAD_OPEN_GRIPPER) {
+            robot.gripper.open();
+        }
+        if (GAMEPAD_CLOSE_GRIPPER) {
+            robot.gripper.close();
+        }
+        if (GAMEPAD_RELEASE_DRONE) {
+            telemetry.addData(">","Drone released");
+            telemetry.update();
+            robot.drone.release();
+        }
 
         robot.updatePositions();
     }
