@@ -30,6 +30,7 @@ public class Robot {
         wrist = new Wrist(hwMap);
         gripper = new Gripper(hwMap);
         drone = new Drone(hwMap);
+
     }
 
     public void moveToPosition(Positions pos) {
@@ -41,6 +42,11 @@ public class Robot {
 
     public void prepareMotorsTeleOp() {
         drivetrain.prepareMotors(false);
+        slide.prepareMotors(true);
+        pivot.prepareMotors(true);
+    }
+
+    public void prepareMotorsAuto() {
         slide.prepareMotors(true);
         pivot.prepareMotors(true);
     }
